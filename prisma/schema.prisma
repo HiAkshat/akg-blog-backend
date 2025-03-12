@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  username   String   @unique
+  email      String   @unique
+  password   String
+  profilePic String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  posts    Post[]
+  comments Comment[]
+  likes    Like[]
+  roles    UserRole[]
+}
+
+model Post {
+  id          String    @id @default(uuid())
+  userId      String
+  title       String
+  slug        String    @unique
+  content     String
+  status      String    @default("draft")
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  author     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments   Comment[]
+  likes      Like[]
+  categories PostCategory[]
+  postImages PostImages[]
+}
+
+model PostImages {
+  id      String  @id @default(uuid())
+  postId  String
+  url     String
+  altText String?
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String @unique
+  slug String @unique
+
+  posts PostCategory[]
+}
+
+model PostCategory {
+  postId     String
+  categoryId String
+
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId]) // Ensures a user can like a post only once
+}
+
+// RBAC: Roles & Permissions
+
+model Role {
+  id   String @id @default(uuid())
+  name String @unique
+
+  users       UserRole[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id   String @id @default(uuid())
+  name String @unique
+
+  roles RolePermission[]
+}
+
+model UserRole {
+  userId String
+  roleId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId]) // Many-to-Many relationship
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId]) // Many-to-Many relationship
+}
