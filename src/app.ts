@@ -4,18 +4,10 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import helmet from 'helmet';
 import { set } from 'mongoose';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import config, { port, gcpRoute } from '@config';
-import { Routes } from '@/interfaces/routes.interface';
-import errorMiddleware from '@middlewares/error.middleware';
-// import { logger } from '@utils/logger';
-// import * as Sentry from '@sentry/node';
+import config, { port } from '@config';
 import bodyParser from 'body-parser';
-import { NotFoundError } from '@exceptions/NotFoundError';
 import { GraphQLSchema } from 'graphql';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
-// import { Logger } from 'winston';
 
 const NODE_ENV = config.NODE_ENV;
 

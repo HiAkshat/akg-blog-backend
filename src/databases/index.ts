@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { database } from '@/config';
 import { IConnection } from '@/typings/config';
 

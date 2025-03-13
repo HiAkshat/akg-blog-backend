@@ -1,7 +1,7 @@
 import App from '@/app';
-import { graphqlSchema } from "./graphql/schema";
+import { protectedGraphqlSchema } from "./graphql/schema";
 import { context } from "./graphql/context";
 
-const app = new App(graphqlSchema, context);
+const app = new App(protectedGraphqlSchema, context);
 
 app.listen();

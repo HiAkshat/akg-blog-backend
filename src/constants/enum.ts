@@ -4,3 +4,9 @@ export enum UserIdentifier {
   UserId = 'user_id',
   MongoId = '_id',
 }
+
+export enum UserRoles {
+  ADMIN = 'ADMIN',
+  AUTHOR = 'AUTHOR',
+  USER = 'USER'
+}

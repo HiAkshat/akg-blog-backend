@@ -24,6 +24,7 @@ export const database = nconf.get('database') as IDatabase;
 export const apm_service = nconf.get('apm_service') as IApmService;
 export const service_name = nconf.get('service_name') as string;
 export const gcpRoute = nconf.get('gcp_route') as string;
+export const jwtSecretKey = nconf.get('jwt_secret_key') as string
 export const is_production = isProduction;
 
 export const port = (() => {

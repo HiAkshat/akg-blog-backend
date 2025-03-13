@@ -1,5 +1,5 @@
 import prisma from "@/databases";
-import { User, Post  } from "@prisma/client";
+import { User, Post } from "@prisma/client";
 
 export default class PostsDao {
   private postsModel = prisma.post;
